@@ -207,8 +207,15 @@ if __name__ == "__main__":
 
 
 # Q5: New Feature Proposal
-# A useful addition would be a "port risk flagging" feature that scans results and highlights
-# ports considered high-risk (e.g. Telnet on 23, RDP on 3389). It would use a list comprehension
-# to filter open ports whose service name appears in a predefined high_risk_services list, then
-# print a warning for each flagged port. This gives users an instant security summary after every scan.
+# A useful addition would be a "port risk classifier" feature that loops through the open ports
+# returned by get_open_ports() and classifies each one by security risk level. Ports in
+# [21, 22, 23, 3389] are flagged as HIGH RISK, ports in [25, 110, 143, 3306] as MEDIUM RISK,
+# and all others as LOW RISK. It uses a nested conditional list comprehension:
+# risk_report = [
+#     (p, s, "HIGH") if p in [21,22,23,3389]
+#     else (p, s, "MEDIUM") if p in [25,110,143,3306]
+#     else (p, s, "LOW")
+#     for p, s, svc in open_ports
+# ]
+# The result is a risk report printed after every scan, giving users an instant security summary.
 # Diagram: See diagram_101549617.png in the repository root
